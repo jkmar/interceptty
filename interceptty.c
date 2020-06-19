@@ -195,6 +195,10 @@ void sigchld(int sig)
   sigdeath(sig);
 }
 
+void toggle_quiet(int sig) {
+    quiet ^= 1;
+}
+
 int alldigits(const char *s)
 {
   while(isdigit(*s))
@@ -853,6 +857,9 @@ int main (int argc, char *argv[])
 
   sigact.sa_handler = sigchld;
   sigaction(SIGCHLD,&sigact,NULL);
+
+  sigact.sa_handler = toggle_quiet;
+  sigaction(SIGUSR1,&sigact,NULL);
 
   while (!please_die_now)
   {
